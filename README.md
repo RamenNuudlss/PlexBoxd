@@ -8,7 +8,6 @@
   <img alt="Self-hosted with Docker" src="https://img.shields.io/badge/self--hosted-Docker-2496ed?style=flat-square&logo=docker&logoColor=white">
   <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3776ab?style=flat-square&logo=python&logoColor=white">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-e5a00d?style=flat-square">
-  <img alt="Status: awaiting Letterboxd API access" src="https://img.shields.io/badge/status-awaiting%20API%20access-f5b84a?style=flat-square">
 </p>
 
 <p align="center">
@@ -32,9 +31,6 @@
 > [!WARNING]
 > **You need your own Letterboxd API access to use Plexboxd.**
 > Letterboxd's API isn't open to everyone: access is granted case by case. Plexboxd does **not** come with shared credentials, so each person who runs it has to request their own from Letterboxd. Approval is entirely up to Letterboxd and can take a while. See [Getting your own Letterboxd API access](#getting-your-own-letterboxd-api-access).
-
-> [!NOTE]
-> **Project status:** the Letterboxd connection is being built against the official API and will be released once the maintainer's own API access is approved. Watch or star the repo to hear when it ships. In the meantime, you can request your own access so you're ready.
 
 ## Features
 
@@ -268,7 +264,6 @@ In the <code>./data</code> folder next to your compose file: settings, sync hist
 
 - [x] Plex sign-in, watch history, ratings and reviews
 - [x] Rewatch detection, duplicate protection, preview mode, dashboard
-- [ ] Letterboxd connection via the official API (waiting on API access)
 - [ ] Prebuilt Docker image on GitHub Container Registry
 - [ ] Multiple Plex users, each with their own Letterboxd account
 - [ ] Optional push notification when an entry is logged
