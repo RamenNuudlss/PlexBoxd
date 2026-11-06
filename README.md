@@ -26,7 +26,7 @@
 
 > [!IMPORTANT]
 > **Plexboxd uses the official Letterboxd API, and nothing else.**
-> It doesn't scrape letterboxd.com, drive a browser, reuse browser cookies, or get around any of Letterboxd's protections. Every request to Letterboxd goes through [their API](https://api-docs.letterboxd.com/) with your permission via Letterboxd's own sign-in.
+> It doesn't scrape letterboxd.com, drive a browser, reuse browser cookies, or get around any of Letterboxd's protections. There's no browser inside the container at all. Every request to Letterboxd goes through [their API](https://api-docs.letterboxd.com/) with your permission via Letterboxd's own sign-in.
 
 > [!WARNING]
 > **You need your own Letterboxd API access to use Plexboxd.**
@@ -77,27 +77,27 @@ flowchart LR
 **1. Get the code**
 
 ```bash
-git clone https://github.com/RamenNuudlss/plexboxd.git
-cd plexboxd
+git clone https://github.com/RamenNuudlss/PlexBoxd.git
+cd PlexBoxd
 ```
 
-**2. Add your Letterboxd API credentials to `docker-compose.yml`**
+**2. Create your `.env` file**
 
-```yaml
-services:
-  plexboxd:
-    build: .
-    container_name: plexboxd
-    restart: unless-stopped
-    network_mode: host            # dashboard on port 8977
-    environment:
-      - TZ=America/New_York       # your time zone, so diary dates are right
-      - LETTERBOXD_CLIENT_ID=your-client-id
-      - LETTERBOXD_CLIENT_SECRET=your-client-secret
-      - UI_PASSWORD=              # optional: password-protect the dashboard
-    volumes:
-      - ./data:/data
+```bash
+cp .env.example .env
 ```
+
+Open `.env` and fill it in:
+
+```ini
+LETTERBOXD_CLIENT_ID=your-client-id         # your own, from Letterboxd
+LETTERBOXD_CLIENT_SECRET=your-client-secret
+PUBLIC_URL=http://192.168.1.50:8977         # the address you'll open the dashboard at
+TZ=America/New_York                         # so diary dates match the day you watched
+UI_PASSWORD=                                # optional: password-protect the dashboard
+```
+
+`PUBLIC_URL` matters: after you sign in, Letterboxd sends you back to `PUBLIC_URL/letterboxd/callback`, so that exact address has to be the redirect URL registered with your Letterboxd API access.
 
 **3. Start it**
 
@@ -105,12 +105,23 @@ services:
 docker compose up -d --build
 ```
 
-**4. Open the dashboard** at `http://<your-server-ip>:8977` and:
+It's a small Python image with no browser inside, so it builds in under a minute.
+
+**4. Open the dashboard** at your `PUBLIC_URL` and:
 
 1. Click **Sign in with Plex**. You approve access on plex.tv, and Plexboxd never sees your Plex password.
 2. Choose your Plex server.
 3. Click **Sign in with Letterboxd**. You approve access on Letterboxd's own page, and Plexboxd never sees your Letterboxd password.
 4. Watch a movie. 🍿
+
+**Updating later**
+
+```bash
+git pull
+docker compose up -d --build
+```
+
+Your settings and sign-ins live in `./data` and are kept across updates.
 
 > [!TIP]
 > Preview mode is **on** by default, so new entries wait on the dashboard until you press **Post**. Once the matches look right, turn it off in **Settings** and everything logs automatically.
@@ -147,6 +158,7 @@ Everything happens at `http://<your-server-ip>:8977`:
 |---|---|---|
 | `LETTERBOXD_CLIENT_ID` | ✅ | Your own Letterboxd API client ID ([request it](#getting-your-own-letterboxd-api-access)) |
 | `LETTERBOXD_CLIENT_SECRET` | ✅ | Your own Letterboxd API client secret |
+| `PUBLIC_URL` | ✅ | The address you open the dashboard at, e.g. `http://192.168.1.50:8977`. Letterboxd's sign-in returns to `PUBLIC_URL/letterboxd/callback`. |
 | `TZ` | Recommended | Your time zone, e.g. `America/New_York`, so diary dates match the day you watched |
 | `UI_PASSWORD` | | Password for the dashboard (any username works) |
 | `PORT` | | Dashboard port (default `8977`) |
@@ -161,7 +173,9 @@ Letterboxd's API isn't universal or self-serve. Access is granted case by case, 
 1. Email **api@letterboxd.com**.
 2. Briefly explain what you'll use it for. You can copy the template below and change the details.
 3. Wait for Letterboxd to reply. Approval is at their discretion, and there's no set timeline.
-4. When you get a client ID and secret, add them to `docker-compose.yml` as shown in [Quick start](#quick-start).
+4. When you get a client ID and secret, put them in your `.env` file as shown in [Quick start](#quick-start).
+
+When Letterboxd asks for a **redirect URL**, give the address of your Plexboxd dashboard followed by `/letterboxd/callback`, for example `http://192.168.1.50:8977/letterboxd/callback`. It must match `PUBLIC_URL` in your `.env`.
 
 <details>
 <summary><b>Email template</b></summary>
@@ -192,7 +206,7 @@ Plexboxd only uses what it needs:
 - create and edit your own log entries;
 - read your own diary, to avoid duplicates.
 
-Keep your client secret private. It belongs in your own `docker-compose.yml` (or an `.env` file) and should never be committed to a repository, including your fork of this one.
+Keep your client secret private. It belongs in your `.env` file, which is already in `.gitignore`, and should never be committed to a repository, including your fork of this one.
 
 ## FAQ
 
@@ -258,7 +272,9 @@ In the <code>./data</code> folder next to your compose file: settings, sync hist
 | **"Plex reviews couldn't be read"** | Plex changed its reviews service. Watches and ratings keep syncing. Run **Diagnostics** and check the issues for a fix. |
 | **A movie shows "Skipped: no match"** | It has no TMDB/IMDb ID in Plex. Use **Fix Match** in Plex, then press **Retry**. |
 | **Nothing shows up after watching** | Check the **Plex account ID** setting (1 is the server owner), then run **Diagnostics**. |
-| **Diary dates are a day off** | Set `TZ` in `docker-compose.yml` to your time zone. |
+| **Diary dates are a day off** | Set `TZ` in your `.env` to your time zone, then `docker compose up -d`. |
+| **Letterboxd sign-in says the redirect URL doesn't match** | `PUBLIC_URL` in `.env` must be exactly the address registered with Letterboxd (redirect `PUBLIC_URL/letterboxd/callback`). |
+| **"Add your LETTERBOXD_CLIENT_ID…"** | Your `.env` is missing your Letterboxd API credentials, or the container wasn't restarted after adding them. |
 
 ## Roadmap
 
@@ -270,7 +286,7 @@ In the <code>./data</code> folder next to your compose file: settings, sync hist
 
 ## Contributing
 
-Issues and pull requests are welcome. Contributions have to keep to the project's one rule: **Letterboxd is accessed only through its official API.** Pull requests that add scraping, browser automation, or cookie-based access won't be merged.
+Issues and pull requests are welcome. Run the tests with `pip install -r requirements.txt pytest && python -m pytest`. Contributions have to keep to the project's one rule: **Letterboxd is accessed only through its official API.** Pull requests that add scraping, browser automation, or cookie-based access won't be merged.
 
 ## Disclaimer
 

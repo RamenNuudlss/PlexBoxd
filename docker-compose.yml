@@ -1,0 +1,14 @@
+services:
+  plexboxd:
+    build: .
+    image: plexboxd:latest
+    container_name: plexboxd
+    restart: unless-stopped
+    # Uses the host's network: the dashboard is on port 8977 and Plexboxd can reach a Plex
+    # server on your LAN directly. (Change PORT below if 8977 is taken.)
+    network_mode: host
+    env_file:
+      - .env
+    volumes:
+      # Settings, sync history and your Plex/Letterboxd sign-in tokens live here.
+      - ./data:/data
