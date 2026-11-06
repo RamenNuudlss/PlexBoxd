@@ -4,6 +4,7 @@
 
 <p align="center">
   <img alt="Letterboxd: official API only" src="https://img.shields.io/badge/Letterboxd-official%20API%20only-3ecf8e?style=flat-square">
+  <img alt="Bring your own Letterboxd API access" src="https://img.shields.io/badge/API%20access-bring%20your%20own-6aa9ff?style=flat-square">
   <img alt="Self-hosted with Docker" src="https://img.shields.io/badge/self--hosted-Docker-2496ed?style=flat-square&logo=docker&logoColor=white">
   <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3776ab?style=flat-square&logo=python&logoColor=white">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-e5a00d?style=flat-square">
@@ -27,11 +28,13 @@
 > [!IMPORTANT]
 > **Plexboxd uses the official Letterboxd API, and nothing else.**
 > It doesn't scrape letterboxd.com, drive a browser, reuse browser cookies, or get around any of Letterboxd's protections. Every request to Letterboxd goes through [their API](https://api-docs.letterboxd.com/) with your permission via Letterboxd's own sign-in.
->
-> Letterboxd grants API access by application only, so you'll need API credentials to run it (see [Letterboxd API credentials](#letterboxd-api-credentials)).
+
+> [!WARNING]
+> **You need your own Letterboxd API access to use Plexboxd.**
+> Letterboxd's API isn't open to everyone: access is granted case by case. Plexboxd does **not** come with shared credentials, so each person who runs it has to request their own from Letterboxd. Approval is entirely up to Letterboxd and can take a while. See [Getting your own Letterboxd API access](#getting-your-own-letterboxd-api-access).
 
 > [!NOTE]
-> **Project status:** API access has been requested from Letterboxd. The Letterboxd connection will be released once access is granted. Watch or star the repo to hear when it ships.
+> **Project status:** the Letterboxd connection is being built against the official API and will be released once the maintainer's own API access is approved. Watch or star the repo to hear when it ships. In the meantime, you can request your own access so you're ready.
 
 ## Features
 
@@ -73,7 +76,7 @@ flowchart LR
 **You'll need:**
 - A Plex Media Server you own. No Plex Pass is required.
 - Docker and Docker Compose: a NAS (Synology, UGREEN, Unraid, TrueNAS…), a home server, or any always-on machine.
-- [Letterboxd API credentials](#letterboxd-api-credentials).
+- **Your own** Letterboxd API client ID and secret, requested from Letterboxd ([how](#getting-your-own-letterboxd-api-access)). Plexboxd won't work without them.
 
 **1. Get the code**
 
@@ -146,23 +149,54 @@ Everything happens at `http://<your-server-ip>:8977`:
 
 | Variable | Required | Description |
 |---|---|---|
-| `LETTERBOXD_CLIENT_ID` | ✅ | Your Letterboxd API client ID |
-| `LETTERBOXD_CLIENT_SECRET` | ✅ | Your Letterboxd API client secret |
+| `LETTERBOXD_CLIENT_ID` | ✅ | Your own Letterboxd API client ID ([request it](#getting-your-own-letterboxd-api-access)) |
+| `LETTERBOXD_CLIENT_SECRET` | ✅ | Your own Letterboxd API client secret |
 | `TZ` | Recommended | Your time zone, e.g. `America/New_York`, so diary dates match the day you watched |
 | `UI_PASSWORD` | | Password for the dashboard (any username works) |
 | `PORT` | | Dashboard port (default `8977`) |
 | `LOG_LEVEL` | | `info` (default) or `debug` |
 
-## Letterboxd API credentials
+## Getting your own Letterboxd API access
 
-Letterboxd's API isn't self-serve: access is granted by application. To get credentials, email **api@letterboxd.com**, describe how you'll use them (a personal Plex → Letterboxd diary sync), and wait for a reply. Their API documentation is at [api-docs.letterboxd.com](https://api-docs.letterboxd.com/).
+Letterboxd's API isn't universal or self-serve. Access is granted case by case, and **every Plexboxd user needs their own**. There are no shared keys in this project, and there never will be: credentials are issued to the person Letterboxd approved.
 
-Plexboxd only asks for what it needs:
+**How to ask:**
+
+1. Email **api@letterboxd.com**.
+2. Briefly explain what you'll use it for. You can copy the template below and change the details.
+3. Wait for Letterboxd to reply. Approval is at their discretion, and there's no set timeline.
+4. When you get a client ID and secret, add them to `docker-compose.yml` as shown in [Quick start](#quick-start).
+
+<details>
+<summary><b>Email template</b></summary>
+
+```text
+Subject: API access request: personal Plex → Letterboxd diary sync (Plexboxd)
+
+Hi Letterboxd team,
+
+I'd like to request API access to run Plexboxd (https://github.com/RamenNuudlss/PlexBoxd),
+an open-source, self-hosted tool, for my own account.
+
+It logs films I finish on my Plex server to my Letterboxd diary with the watch date,
+and carries over my Plex rating and review (with the spoiler flag) and the rewatch flag.
+
+It acts only on my account, after I sign in with Letterboxd. It needs film lookup by
+TMDB/IMDb ID, creating and editing my own log entries, and reading my own diary to avoid
+duplicates. That's a handful of requests per film watched, with no scraping or bulk data use.
+
+Thanks,
+<your name>
+Letterboxd: letterboxd.com/<your-username>
+```
+</details>
+
+Plexboxd only uses what it needs:
 - look up films by TMDB or IMDb ID;
 - create and edit your own log entries;
 - read your own diary, to avoid duplicates.
 
-Keep your client secret private. It lives in your `docker-compose.yml` (or an `.env` file), never in this repository.
+Keep your client secret private. It belongs in your own `docker-compose.yml` (or an `.env` file) and should never be committed to a repository, including your fork of this one.
 
 ## FAQ
 
@@ -170,6 +204,12 @@ Keep your client secret private. It lives in your `docker-compose.yml` (or an `.
 <summary><b>Why "official API only"? Wouldn't scraping be easier?</b></summary>
 <br>
 Easier, maybe, but it goes against what Letterboxd allows, it breaks whenever their site changes, and it means handing a tool your login cookies. The official API is stable, respects your account, and is what Letterboxd wants third-party tools to use. Plexboxd will never include a scraping or browser-automation mode.
+</details>
+
+<details>
+<summary><b>Why do I have to request my own Letterboxd API access? Can't Plexboxd include a key?</b></summary>
+<br>
+Letterboxd approves API access per applicant, and a client secret is meant to stay private. A key published in an open-source project would be exposed to everyone and would likely be revoked. Each user requests access for themselves, and Letterboxd decides. It's an extra step, but it keeps Plexboxd fully above board with Letterboxd.
 </details>
 
 <details>
