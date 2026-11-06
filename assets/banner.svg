@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="Plexboxd: your Plex watches, logged to Letterboxd">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14181d"/>
+      <stop offset="1" stop-color="#0b0e12"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2b33d"/>
+      <stop offset="1" stop-color="#ff7a3d"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="400" rx="24" fill="url(#bg)"/>
+  <rect width="1280" height="400" rx="24" fill="url(#grid)"/>
+  <circle cx="1080" cy="80" r="220" fill="#f2b33d" opacity="0.05"/>
+  <circle cx="1180" cy="360" r="160" fill="#3ecf8e" opacity="0.05"/>
+
+  <!-- wordmark -->
+  <g transform="translate(88 118)">
+    <rect width="76" height="76" rx="18" fill="url(#mark)"/>
+    <path d="M28 20 L58 38 L28 56 Z" fill="#16120a"/>
+    <text x="104" y="58" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="800" fill="#e9edf2" letter-spacing="-1.5">Plexboxd</text>
+  </g>
+  <text x="88" y="250" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="27" fill="#aab4c0">Finish a movie on Plex. It lands in your Letterboxd diary.</text>
+  <text x="88" y="290" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#6f7b8a">Watch date · star rating · written review · rewatches · official API only</text>
+
+  <!-- flow graphic: film strip -> diary -->
+  <g transform="translate(820 120)">
+    <!-- film strip -->
+    <g>
+      <rect x="0" y="20" width="120" height="120" rx="16" fill="#1b2027" stroke="#2c333d"/>
+      <rect x="16" y="20" width="10" height="120" fill="#232931"/>
+      <rect x="94" y="20" width="10" height="120" fill="#232931"/>
+      <g fill="#0b0e12">
+        <rect x="18" y="32" width="6" height="8" rx="1.5"/><rect x="18" y="56" width="6" height="8" rx="1.5"/>
+        <rect x="18" y="80" width="6" height="8" rx="1.5"/><rect x="18" y="104" width="6" height="8" rx="1.5"/>
+        <rect x="96" y="32" width="6" height="8" rx="1.5"/><rect x="96" y="56" width="6" height="8" rx="1.5"/>
+        <rect x="96" y="80" width="6" height="8" rx="1.5"/><rect x="96" y="104" width="6" height="8" rx="1.5"/>
+      </g>
+      <path d="M50 62 L76 80 L50 98 Z" fill="#f2b33d"/>
+    </g>
+    <!-- connector -->
+    <g fill="#f2b33d">
+      <circle cx="146" cy="80" r="3" opacity="0.25"/><circle cx="162" cy="80" r="3" opacity="0.4"/>
+      <circle cx="178" cy="80" r="3" opacity="0.55"/><circle cx="194" cy="80" r="3" opacity="0.7"/>
+      <circle cx="210" cy="80" r="3" opacity="0.85"/>
+    </g>
+    <path d="M222 80 H244" stroke="#3ecf8e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M236 70 L250 80 L236 90" fill="none" stroke="#3ecf8e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- diary card -->
+    <g transform="translate(266 0)">
+      <rect x="0" y="0" width="150" height="160" rx="16" fill="#1b2027" stroke="#2c333d"/>
+      <rect x="0" y="0" width="150" height="34" rx="16" fill="#222831"/>
+      <rect x="0" y="18" width="150" height="16" fill="#222831"/>
+      <text x="16" y="23" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#8b96a5" letter-spacing="1.5">DIARY</text>
+      <text x="16" y="66" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#3ecf8e" letter-spacing="2">★★★★½</text>
+      <rect x="16" y="84" width="118" height="8" rx="4" fill="#2c333d"/>
+      <rect x="16" y="100" width="96" height="8" rx="4" fill="#2c333d"/>
+      <rect x="16" y="116" width="106" height="8" rx="4" fill="#2c333d"/>
+      <rect x="16" y="134" width="58" height="14" rx="7" fill="#16283f"/>
+      <text x="25" y="145" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#6aa9ff">REWATCH</text>
+    </g>
+  </g>
+</svg>
